@@ -8,7 +8,7 @@ def Start():
     """основной циклический метод"""    
     try:
         notes = FileIO.load()
-    except :
+    except:
         notes = {}
     Model.Init(notes)    
     while True:
@@ -49,7 +49,11 @@ def Start():
 
         # **************** Редактировать ****************
         if user_input == "2":
-            id = int(View.InputString("Введите ID записи для редактирования: "))
+            try:
+                id = int(View.InputString("Введите ID записи для редактирования: "))
+            except:
+                View.InputString("Внимание! Некорректное значение ID!\nНажмите <Enter>.")
+                continue
             if Model.CheckID(id) == False:
                 View.InputString(
                     "Ошибка. Введен неверный ID! Нажмите <Enter>:")
@@ -64,10 +68,16 @@ def Start():
 
         # **************** Сохранить ****************
         if user_input == "5":
-            FileIO.save(Model.GetItems(""))
+            try:
+                FileIO.save(Model.GetItems(""))
+            except:
+                View.InputString("Внимание! произошла ошибка при сохранении файла 'notes'!\nНажмите <Enter>.")
             continue
 
         # **************** Загрузить ****************
         if user_input == "6":
-            Model.Init(FileIO.load())
+            try:
+                Model.Init(FileIO.load())
+            except:
+                View.InputString("Внимание! произошла ошибка при загрузке файла 'notes'!\nНажмите <Enter>.")
             continue
